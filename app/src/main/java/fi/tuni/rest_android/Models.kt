@@ -9,7 +9,7 @@ class Models {
         .connectTimeout(20, TimeUnit.SECONDS)
         .build()
 
-    fun getAll(url : String, callback: (String) -> Unit) {
+    fun getData(url : String, callback : (String) -> Unit) {
         val request = Request.Builder().url(url).build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {

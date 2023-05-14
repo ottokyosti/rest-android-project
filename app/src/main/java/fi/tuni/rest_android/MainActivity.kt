@@ -23,38 +23,119 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import fi.tuni.rest_android.ui.theme.RestAndroidTheme
+import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
     private val client = Models()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var users : Array<User>?
-        client.getAll("https://dummyjson.com/users") {
+        client.getData("https://dummyjson.com/users") {
             users = ObjectMapper().readValue(it, Users::class.java).users
             runOnUiThread {
                 setContent {
                     RestAndroidTheme {
-                        val usersList by remember { mutableStateOf(users) }
-                        Surface(
-                            modifier = Modifier.fillMaxSize(),
-                            color = MaterialTheme.colors.background
-                        ) {
-                            LazyColumn {
-                                items(usersList!!) { user ->
-                                    UserCard(user)
-                                }
+                        var usersList by remember { mutableStateOf(users) }
+                        Scaffold(
+                            topBar = { SearchBar(client) { response ->
+                                usersList = ObjectMapper().readValue(response, Users::class.java).users
+                            }},
+                            backgroundColor = MaterialTheme.colors.background
+                        ) { padding ->
+                            Box(
+                                modifier = Modifier.padding(padding)
+                            ) {
+                                MainContent(usersList)
                             }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun MainContent(usersList : Array<User>?) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ) {
+        LazyColumn {
+            items(usersList!!) { user ->
+                UserCard(user)
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchBar(client : Models, callback : (String) -> Unit) {
+    var searchWord by remember { mutableStateOf("") }
+    TopAppBar(
+        backgroundColor = MaterialTheme.colors.background
+    ) {
+        TextField(
+            value = searchWord,
+            onValueChange = { value ->
+                searchWord = value
+                val url = "https://dummyjson.com/users/search?q=$searchWord"
+                client.getData(url) { response ->
+                    thread {
+                        callback(response)
+                    }
+                }
+            },
+            leadingIcon = {
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = null
+                )
+            },
+            trailingIcon = {
+                if (searchWord != "") {
+                    IconButton(
+                        onClick = {
+                            searchWord = ""
+                            val url = "https://dummyjson.com/users/search?q=$searchWord"
+                            client.getData(url) { response ->
+                                thread {
+                                    callback(response)
+                                }
+                            }
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Close,
+                            contentDescription = null
+                        )
+                    }
+                }
+            },
+            placeholder = {
+                Text("Search")
+            },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.background,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                textColor = MaterialTheme.colors.surface,
+                trailingIconColor = MaterialTheme.colors.surface,
+                leadingIconColor = MaterialTheme.colors.surface,
+                cursorColor = MaterialTheme.colors.surface,
+                placeholderColor = Color.Gray
+            )
+        )
     }
 }
 
@@ -89,16 +170,22 @@ fun UserInfo(user : User) {
     var isExpanded by remember { mutableStateOf(false) }
     var openDeleteConfirm by remember { mutableStateOf(false) }
     Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colors.background,
+        modifier = Modifier.fillMaxWidth().clickable {
+            isExpanded = !isExpanded
+        },
+        color = if (MaterialTheme.colors.isLight) {
+            MaterialTheme.colors.background
+        } else {
+            Color(0xFF1A1A1A)
+        },
         shape = RoundedCornerShape(8.dp),
-        elevation = 5.dp
+        elevation = 5.dp,
     ) {
         Box {
             Column(
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(5.dp)
+                    .padding(7.dp)
             ) {
                 Text(
                     text = user.toString(),
