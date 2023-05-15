@@ -47,3 +47,12 @@ fun RestAndroidTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compo
         content = content
     )
 }
+
+@Composable
+fun containerColor() : Color {
+    return if (MaterialTheme.colors.isLight) {
+        MaterialTheme.colors.background
+    } else {
+        Color(0xFF1A1A1A)
+    }
+}

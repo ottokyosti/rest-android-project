@@ -9,8 +9,20 @@ class Models {
         .connectTimeout(20, TimeUnit.SECONDS)
         .build()
 
-    fun getData(url : String, callback : (String) -> Unit) {
+    fun getRequest(url : String, callback : (String) -> Unit) {
         val request = Request.Builder().url(url).build()
+        makeRequest(request) {
+            callback(it)
+        }
+    }
+    fun deleteRequest(url : String, callback: (String) -> Unit) {
+        val request = Request.Builder().url(url).delete().build()
+        makeRequest(request) {
+            callback("User deleted successfully!")
+        }
+    }
+
+    private fun makeRequest(request : Request, callback: (String) -> Unit) {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()

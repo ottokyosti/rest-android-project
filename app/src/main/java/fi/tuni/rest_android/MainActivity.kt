@@ -1,6 +1,8 @@
 package fi.tuni.rest_android
 
+import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -30,6 +32,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import fi.tuni.rest_android.ui.theme.RestAndroidTheme
+import fi.tuni.rest_android.ui.theme.containerColor
 import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +40,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var users : Array<User>?
-        client.getData("https://dummyjson.com/users") {
+        client.getRequest("https://dummyjson.com/users") {
             users = ObjectMapper().readValue(it, Users::class.java).users
             runOnUiThread {
                 setContent {
@@ -52,7 +55,7 @@ class MainActivity : ComponentActivity() {
                             Box(
                                 modifier = Modifier.padding(padding)
                             ) {
-                                MainContent(usersList)
+                                MainContent(usersList, client)
                             }
                         }
                     }
@@ -63,14 +66,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainContent(usersList : Array<User>?) {
+fun MainContent(usersList : Array<User>?, client : Models) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         LazyColumn {
             items(usersList!!) { user ->
-                UserCard(user)
+                UserCard(user, client)
             }
         }
     }
@@ -87,9 +90,9 @@ fun SearchBar(client : Models, callback : (String) -> Unit) {
             onValueChange = { value ->
                 searchWord = value
                 val url = "https://dummyjson.com/users/search?q=$searchWord"
-                client.getData(url) { response ->
+                client.getRequest(url) {
                     thread {
-                        callback(response)
+                        callback(it)
                     }
                 }
             },
@@ -105,9 +108,9 @@ fun SearchBar(client : Models, callback : (String) -> Unit) {
                         onClick = {
                             searchWord = ""
                             val url = "https://dummyjson.com/users/search?q=$searchWord"
-                            client.getData(url) { response ->
+                            client.getRequest(url) {
                                 thread {
-                                    callback(response)
+                                    callback(it)
                                 }
                             }
                         }
@@ -140,7 +143,7 @@ fun SearchBar(client : Models, callback : (String) -> Unit) {
 }
 
 @Composable
-fun UserCard(user : User) {
+fun UserCard(user : User, client : Models) {
     val context = LocalContext.current
     Row (
          modifier = Modifier
@@ -161,18 +164,21 @@ fun UserCard(user : User) {
                 .padding(10.dp)
         )
         Spacer(Modifier.width(10.dp))
-        UserInfo(user)
+        UserInfo(user, client)
     }
 }
 
 @Composable
-fun UserInfo(user : User) {
+fun UserInfo(user : User, client : Models) {
     var isExpanded by remember { mutableStateOf(false) }
     var openDeleteConfirm by remember { mutableStateOf(false) }
+    var deleteSuccessful by remember { mutableStateOf("") }
     Surface(
-        modifier = Modifier.fillMaxWidth().clickable {
-            isExpanded = !isExpanded
-        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                isExpanded = !isExpanded
+            },
         color = if (MaterialTheme.colors.isLight) {
             MaterialTheme.colors.background
         } else {
@@ -229,16 +235,41 @@ fun UserInfo(user : User) {
         }
         if (openDeleteConfirm) {
             MyDeleteConfirmDialog {
+                if (it) {
+                    val url = "https://dummyjson.com/users/${user.id}"
+                    client.deleteRequest(url) { response ->
+                        deleteSuccessful = response
+                    }
+                }
                 openDeleteConfirm = !openDeleteConfirm
             }
+        }
+        if (deleteSuccessful != "") {
+            AlertDialog(
+                onDismissRequest = { deleteSuccessful = "" },
+                title = {
+                    Text(deleteSuccessful)
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            deleteSuccessful = ""
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor())
+                    ) {
+                        Text("Ok")
+                    }
+                },
+                backgroundColor = containerColor()
+            )
         }
     }
 }
 
 @Composable
-fun MyDeleteConfirmDialog(callback: () -> Unit) {
+fun MyDeleteConfirmDialog(callback: (Boolean) -> Unit) {
     AlertDialog(
-        onDismissRequest = { callback() },
+        onDismissRequest = { callback(false) },
         title = {
             Text(
                 text = "Do you want to delete this user?",
@@ -252,9 +283,9 @@ fun MyDeleteConfirmDialog(callback: () -> Unit) {
             )
         },
         dismissButton = {
-            OutlinedButton(
-                onClick = { callback() },
-                border = BorderStroke(0.dp, Color.Transparent)
+            Button(
+                onClick = { callback(false) },
+                colors = ButtonDefaults.buttonColors(containerColor())
             ) {
                 Text(
                     text = "Cancel",
@@ -263,15 +294,16 @@ fun MyDeleteConfirmDialog(callback: () -> Unit) {
             }
         },
         confirmButton = {
-            OutlinedButton(
-                onClick = { callback() },
-                border = BorderStroke(0.dp, Color.Transparent)
+            Button(
+                onClick = { callback(true) },
+                colors = ButtonDefaults.buttonColors(containerColor())
             ) {
                 Text(
                     text = "Confirm",
                     fontWeight = FontWeight.Bold,
                 )
             }
-        }
+        },
+        backgroundColor = containerColor()
     )
 }
