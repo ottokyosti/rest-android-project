@@ -15,6 +15,38 @@ data class User (var id : Int? = null,
                  var weight : String? = null,
                  var image : String? = null) {
 
+    fun updateAttributes(index : Int, value : String?) {
+        when (index) {
+            0 -> {
+                this.firstName = value
+            }
+            1 -> {
+                this.lastName = value
+            }
+            2 -> {
+                this.username = value
+            }
+            3 -> {
+                this.age = value?.toIntOrNull()
+            }
+            4 -> {
+                this.gender = value
+            }
+            5 -> {
+                this.email = value
+            }
+            6 -> {
+                this.phone = value
+            }
+            7 -> {
+                this.height = value
+            }
+            8 -> {
+                this.weight = value
+            }
+        }
+    }
+
     override fun toString() : String {
         return "${this.firstName} ${this.lastName}\n" +
                 "Username: ${this.username}\n" +
@@ -24,5 +56,33 @@ data class User (var id : Int? = null,
                 "Phone: ${this.phone}\n" +
                 "Height: ${this.height} cm\n" +
                 "Weight: ${this.weight} kg"
+    }
+
+    fun getAttributes() : Array<String> {
+        return arrayOf(
+            "first name",
+            "last name",
+            "username",
+            "age",
+            "gender",
+            "email",
+            "phone",
+            "height",
+            "weight"
+        )
+    }
+
+    fun attrToArray() : Array<String> {
+        return arrayOf(
+            firstName ?: "",
+            lastName ?: "",
+            username ?: "",
+            age.toString(),
+            gender ?: "",
+            email ?: "",
+            phone ?: "",
+            height ?: "",
+            weight ?: ""
+        )
     }
 }

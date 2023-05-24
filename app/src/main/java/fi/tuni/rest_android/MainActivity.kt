@@ -1,17 +1,14 @@
 package fi.tuni.rest_android
 
-import android.app.Activity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -24,8 +21,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -33,6 +30,7 @@ import coil.request.ImageRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import fi.tuni.rest_android.ui.theme.RestAndroidTheme
 import fi.tuni.rest_android.ui.theme.containerColor
+import java.util.*
 import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
@@ -45,18 +43,16 @@ class MainActivity : ComponentActivity() {
             runOnUiThread {
                 setContent {
                     RestAndroidTheme {
-                        var usersList by remember { mutableStateOf(users) }
-                        Scaffold(
-                            topBar = { SearchBar(client) { response ->
-                                usersList = ObjectMapper().readValue(response, Users::class.java).users
-                            }},
-                            backgroundColor = MaterialTheme.colors.background
-                        ) { padding ->
-                            Box(
-                                modifier = Modifier.padding(padding)
-                            ) {
-                                MainContent(usersList, client)
-                            }
+                        val isAddViewOn = remember {
+                            mutableStateOf(false)
+                        }
+                        val isModify = remember {
+                            mutableStateOf(Pair(false, User()))
+                        }
+                        if (!isAddViewOn.value) {
+                            MyScreen(isAddViewOn, client, users, isModify)
+                        } else {
+                            AddView(isAddViewOn, isModify)
                         }
                     }
                 }
@@ -66,14 +62,110 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainContent(usersList : Array<User>?, client : Models) {
+fun AddView(addViewState : MutableState<Boolean>, modifyState : MutableState<Pair<Boolean, User>>) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ) {
+        val userToAdd = remember { mutableStateOf(modifyState.value.second) }
+        LazyColumn {
+            itemsIndexed(modifyState.value.second.getAttributes()) { index, attribute ->
+                Row {
+                    Text(
+                        text = "${attribute.replaceFirstChar { it.uppercaseChar() }}:"
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    MyTextField(index, modifyState.value, attribute) {
+                        userToAdd.value.updateAttributes(index, it)
+                    }
+                }
+            }
+            items(1) {
+                Button(
+                    onClick = {
+                        println(userToAdd.value)
+                        addViewState.value = false
+                    }
+                ) {
+                    Text( "Confirm")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MyTextField(index : Int,
+                toModify : Pair<Boolean, User>,
+                attribute : String,
+                onUpdate : (String) -> Unit
+) {
+    val fieldValue = if (toModify.first)
+        remember { mutableStateOf(toModify.second.attrToArray()[index]) }
+    else
+        remember { mutableStateOf("") }
+    TextField(
+        value = fieldValue.value,
+        onValueChange = { value ->
+            fieldValue.value = value
+            onUpdate(value)
+        },
+        placeholder = {
+            Text("Enter your $attribute")
+        }
+    )
+}
+
+@Composable
+fun MyScreen(addViewState : MutableState<Boolean>,
+             client : Models,
+             users : Array<User>?,
+             isModifyOn: MutableState<Pair<Boolean, User>>
+) {
+    var usersList by remember {
+        mutableStateOf(users)
+    }
+    Scaffold(
+        topBar = { SearchBar(client) { response ->
+            usersList = ObjectMapper().readValue(response, Users::class.java).users
+        }},
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    addViewState.value = true
+                    isModifyOn.value = Pair(false, User())
+                },
+                backgroundColor = MaterialTheme.colors.primary
+            ) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = null
+                )
+            }
+        },
+        backgroundColor = MaterialTheme.colors.background
+    ) { padding ->
+        Box(
+            modifier = Modifier.padding(padding)
+        ) {
+            MainContent(usersList, client, addViewState, isModifyOn)
+        }
+    }
+}
+
+@Composable
+fun MainContent(usersList : Array<User>?,
+                client : Models,
+                addViewState : MutableState<Boolean>,
+                isModifyOn: MutableState<Pair<Boolean, User>>
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         LazyColumn {
             items(usersList!!) { user ->
-                UserCard(user, client)
+                UserCard(user, client, addViewState, isModifyOn)
             }
         }
     }
@@ -143,7 +235,11 @@ fun SearchBar(client : Models, callback : (String) -> Unit) {
 }
 
 @Composable
-fun UserCard(user : User, client : Models) {
+fun UserCard(user : User,
+             client : Models,
+             addViewState : MutableState<Boolean>,
+             isModifyOn : MutableState<Pair<Boolean, User>>
+) {
     val context = LocalContext.current
     Row (
          modifier = Modifier
@@ -164,12 +260,16 @@ fun UserCard(user : User, client : Models) {
                 .padding(10.dp)
         )
         Spacer(Modifier.width(10.dp))
-        UserInfo(user, client)
+        UserInfo(user, client, addViewState, isModifyOn)
     }
 }
 
 @Composable
-fun UserInfo(user : User, client : Models) {
+fun UserInfo(user : User,
+             client : Models,
+             addViewState : MutableState<Boolean>,
+             modify : MutableState<Pair<Boolean, User>>
+) {
     var isExpanded by remember { mutableStateOf(false) }
     var openDeleteConfirm by remember { mutableStateOf(false) }
     var deleteSuccessful by remember { mutableStateOf("") }
@@ -211,7 +311,10 @@ fun UserInfo(user : User, client : Models) {
                         )
                     }
                     IconButton(
-                        onClick = {}
+                        onClick = {
+                            modify.value = Pair(true, user)
+                            addViewState.value = true
+                        }
                     ) {
                         Icon(
                             Icons.Filled.Edit,
