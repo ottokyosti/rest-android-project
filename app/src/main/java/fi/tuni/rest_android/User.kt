@@ -11,8 +11,8 @@ data class User (var id : Int? = null,
                  var gender : String? = null,
                  var email : String? = null,
                  var phone : String? = null,
-                 var height : String? = null,
-                 var weight : String? = null,
+                 var height : Int? = null,
+                 var weight : Double? = null,
                  var image : String? = null) {
 
     fun updateAttributes(index : Int, value : String?) {
@@ -39,10 +39,10 @@ data class User (var id : Int? = null,
                 this.phone = value
             }
             7 -> {
-                this.height = value
+                this.height = value?.toIntOrNull()
             }
             8 -> {
-                this.weight = value
+                this.weight = value?.toDoubleOrNull()
             }
         }
     }
@@ -74,15 +74,15 @@ data class User (var id : Int? = null,
 
     fun attrToArray() : Array<String> {
         return arrayOf(
-            firstName ?: "",
-            lastName ?: "",
-            username ?: "",
+            firstName!!,
+            lastName!!,
+            username!!,
             age.toString(),
-            gender ?: "",
-            email ?: "",
-            phone ?: "",
-            height ?: "",
-            weight ?: ""
+            gender!!,
+            email!!,
+            phone!!,
+            height.toString(),
+            weight.toString()
         )
     }
 }

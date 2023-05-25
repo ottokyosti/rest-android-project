@@ -3,6 +3,8 @@ package fi.tuni.rest_android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,7 +23,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,7 +31,6 @@ import coil.request.ImageRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import fi.tuni.rest_android.ui.theme.RestAndroidTheme
 import fi.tuni.rest_android.ui.theme.containerColor
-import java.util.*
 import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                         if (!isAddViewOn.value) {
                             MyScreen(isAddViewOn, client, users, isModify)
                         } else {
-                            AddView(isAddViewOn, isModify)
+                            AddView(isAddViewOn, isModify, client)
                         }
                     }
                 }
@@ -62,32 +62,80 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun AddView(addViewState : MutableState<Boolean>, modifyState : MutableState<Pair<Boolean, User>>) {
+fun AddView(addViewState : MutableState<Boolean>,
+            modifyState : MutableState<Pair<Boolean, User>>,
+            client : Models
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         val userToAdd = remember { mutableStateOf(modifyState.value.second) }
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.padding(10.dp)
+        ) {
             itemsIndexed(modifyState.value.second.getAttributes()) { index, attribute ->
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 10.dp)
+                ) {
                     Text(
-                        text = "${attribute.replaceFirstChar { it.uppercaseChar() }}:"
+                        text = "${attribute.replaceFirstChar { it.uppercaseChar() }}:",
                     )
-                    Spacer(Modifier.height(10.dp))
+                    Spacer(Modifier.width(10.dp))
                     MyTextField(index, modifyState.value, attribute) {
                         userToAdd.value.updateAttributes(index, it)
                     }
                 }
             }
-            items(1) {
-                Button(
-                    onClick = {
-                        println(userToAdd.value)
-                        addViewState.value = false
-                    }
+            item {
+                Box(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text( "Confirm")
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(10.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                addViewState.value = false
+                            },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
+                            border = BorderStroke(1.dp, Color.DarkGray)
+                        ) {
+                            Text(
+                                text = "Cancel",
+                                color = MaterialTheme.colors.surface
+                            )
+                        }
+                        Spacer(Modifier.width(5.dp))
+                        Button(
+                            onClick = {
+                                val jsonString = ObjectMapper().writeValueAsString(userToAdd.value)
+                                if (modifyState.value.first) {
+                                    client.putRequest(
+                                        "https://dummyjson.com/users/${modifyState.value.second.id}",
+                                        jsonString
+                                    ) {
+                                        println(it)
+                                    }
+                                } else {
+                                    client.postRequest(jsonString) {
+                                        println(it)
+                                    }
+                                }
+                                addViewState.value = false
+                            },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
+                            border = BorderStroke(1.dp, Color.DarkGray)
+                        ) {
+                            Text(
+                                text = "Confirm",
+                                color = MaterialTheme.colors.surface
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -104,7 +152,8 @@ fun MyTextField(index : Int,
         remember { mutableStateOf(toModify.second.attrToArray()[index]) }
     else
         remember { mutableStateOf("") }
-    TextField(
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
         value = fieldValue.value,
         onValueChange = { value ->
             fieldValue.value = value
@@ -112,7 +161,8 @@ fun MyTextField(index : Int,
         },
         placeholder = {
             Text("Enter your $attribute")
-        }
+        },
+        singleLine = true
     )
 }
 

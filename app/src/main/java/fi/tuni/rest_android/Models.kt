@@ -1,6 +1,8 @@
 package fi.tuni.rest_android
 
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -19,6 +21,23 @@ class Models {
         val request = Request.Builder().url(url).delete().build()
         makeRequest(request) {
             callback("User deleted successfully!")
+        }
+    }
+
+    fun postRequest(jsonString : String, callback: (String) -> Unit) {
+        val url = "https://dummyjson.com/users/add"
+        val requestBody = jsonString.toRequestBody("application/json".toMediaType())
+        val request = Request.Builder().url(url).post(requestBody).build()
+        makeRequest(request) {
+            callback(it)
+        }
+    }
+
+    fun putRequest(url : String, jsonString : String, callback: (String) -> Unit) {
+        val requestBody = jsonString.toRequestBody("application/json".toMediaType())
+        val request = Request.Builder().url(url).put(requestBody).build()
+        makeRequest(request) {
+            callback(it)
         }
     }
 
