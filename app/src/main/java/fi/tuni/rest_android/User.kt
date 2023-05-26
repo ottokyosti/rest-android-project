@@ -8,14 +8,13 @@ data class User (var id : Int? = null,
                  var lastName : String? = null,
                  var username : String? = null,
                  var age : Int? = null,
-                 var gender : String? = null,
                  var email : String? = null,
                  var phone : String? = null,
                  var height : Int? = null,
                  var weight : Double? = null,
                  var image : String? = null) {
 
-    fun updateAttributes(index : Int, value : String?) {
+    fun updateAttributes(index : Int, value : String) {
         when (index) {
             0 -> {
                 this.firstName = value
@@ -27,22 +26,19 @@ data class User (var id : Int? = null,
                 this.username = value
             }
             3 -> {
-                this.age = value?.toIntOrNull()
+                this.age = value.toInt()
             }
             4 -> {
-                this.gender = value
-            }
-            5 -> {
                 this.email = value
             }
-            6 -> {
+            5 -> {
                 this.phone = value
             }
-            7 -> {
-                this.height = value?.toIntOrNull()
+            6 -> {
+                this.height = value.toInt()
             }
-            8 -> {
-                this.weight = value?.toDoubleOrNull()
+            7 -> {
+                this.weight = value.toDouble()
             }
         }
     }
@@ -51,7 +47,6 @@ data class User (var id : Int? = null,
         return "${this.firstName} ${this.lastName}\n" +
                 "Username: ${this.username}\n" +
                 "Age: ${this.age}\n" +
-                "Gender: ${this.gender}\n" +
                 "Email: ${this.email}\n" +
                 "Phone: ${this.phone}\n" +
                 "Height: ${this.height} cm\n" +
@@ -64,7 +59,6 @@ data class User (var id : Int? = null,
             "last name",
             "username",
             "age",
-            "gender",
             "email",
             "phone",
             "height",
@@ -74,13 +68,12 @@ data class User (var id : Int? = null,
 
     fun attrToArray() : Array<String> {
         return arrayOf(
-            firstName!!,
-            lastName!!,
-            username!!,
+            firstName ?: "",
+            lastName ?: "",
+            username ?: "",
             age.toString(),
-            gender!!,
-            email!!,
-            phone!!,
+            email ?: "",
+            phone ?: "",
             height.toString(),
             weight.toString()
         )

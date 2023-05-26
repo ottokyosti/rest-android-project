@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -64,7 +63,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AddView(addViewState : MutableState<Boolean>,
             modifyState : MutableState<Pair<Boolean, User>>,
-            client : Models
+            client : Models,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -77,12 +76,8 @@ fun AddView(addViewState : MutableState<Boolean>,
             itemsIndexed(modifyState.value.second.getAttributes()) { index, attribute ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(vertical = 10.dp)
+                    modifier = Modifier.padding(vertical = 5.dp)
                 ) {
-                    Text(
-                        text = "${attribute.replaceFirstChar { it.uppercaseChar() }}:",
-                    )
-                    Spacer(Modifier.width(10.dp))
                     MyTextField(index, modifyState.value, attribute) {
                         userToAdd.value.updateAttributes(index, it)
                     }
@@ -152,17 +147,38 @@ fun MyTextField(index : Int,
         remember { mutableStateOf(toModify.second.attrToArray()[index]) }
     else
         remember { mutableStateOf("") }
+    val isValid = remember { mutableStateOf(Validator.validate(attribute, fieldValue.value)) }
+    val outlineColor = if (isValid.value) Color.Green else Color.Red
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = fieldValue.value,
+        isError = !isValid.value,
         onValueChange = { value ->
             fieldValue.value = value
-            onUpdate(value)
+            isValid.value = if (Validator.validate(attribute, value)) {
+                onUpdate(value)
+                true
+            } else {
+                false
+            }
+        },
+        label = {
+            Text(attribute.replaceFirstChar { it.uppercaseChar() })
         },
         placeholder = {
             Text("Enter your $attribute")
         },
-        singleLine = true
+        singleLine = true,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = outlineColor,
+            unfocusedBorderColor = outlineColor,
+            errorBorderColor = outlineColor,
+            focusedLabelColor = outlineColor,
+            errorLabelColor = outlineColor,
+            backgroundColor = MaterialTheme.colors.background,
+            errorCursorColor = Color.White,
+            cursorColor = Color.White,
+        )
     )
 }
 
