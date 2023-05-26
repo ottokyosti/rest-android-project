@@ -26,7 +26,7 @@ data class User (var id : Int? = null,
                 this.username = value
             }
             3 -> {
-                this.age = value.toInt()
+                this.age = value.toIntOrNull()
             }
             4 -> {
                 this.email = value
@@ -35,10 +35,10 @@ data class User (var id : Int? = null,
                 this.phone = value
             }
             6 -> {
-                this.height = value.toInt()
+                this.height = value.toIntOrNull()
             }
             7 -> {
-                this.weight = value.toDouble()
+                this.weight = value.toDoubleOrNull()
             }
         }
     }

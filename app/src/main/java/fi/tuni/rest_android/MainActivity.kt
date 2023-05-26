@@ -3,13 +3,11 @@ package fi.tuni.rest_android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -31,6 +29,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import fi.tuni.rest_android.ui.theme.RestAndroidTheme
 import fi.tuni.rest_android.ui.theme.containerColor
 import kotlin.concurrent.thread
+import fi.tuni.rest_android.views.addview.AddView
+import fi.tuni.rest_android.views.mainview.MainView
 
 class MainActivity : ComponentActivity() {
     private val client = Models()
@@ -49,172 +49,13 @@ class MainActivity : ComponentActivity() {
                             mutableStateOf(Pair(false, User()))
                         }
                         if (!isAddViewOn.value) {
-                            MyScreen(isAddViewOn, client, users, isModify)
+                            MainView(isAddViewOn, client, users, isModify)
                         } else {
                             AddView(isAddViewOn, isModify, client)
                         }
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun AddView(addViewState : MutableState<Boolean>,
-            modifyState : MutableState<Pair<Boolean, User>>,
-            client : Models,
-) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
-    ) {
-        val userToAdd = remember { mutableStateOf(modifyState.value.second) }
-        LazyColumn(
-            modifier = Modifier.padding(10.dp)
-        ) {
-            itemsIndexed(modifyState.value.second.getAttributes()) { index, attribute ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(vertical = 5.dp)
-                ) {
-                    MyTextField(index, modifyState.value, attribute) {
-                        userToAdd.value.updateAttributes(index, it)
-                    }
-                }
-            }
-            item {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(10.dp)
-                    ) {
-                        Button(
-                            onClick = {
-                                addViewState.value = false
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
-                            border = BorderStroke(1.dp, Color.DarkGray)
-                        ) {
-                            Text(
-                                text = "Cancel",
-                                color = MaterialTheme.colors.surface
-                            )
-                        }
-                        Spacer(Modifier.width(5.dp))
-                        Button(
-                            onClick = {
-                                val jsonString = ObjectMapper().writeValueAsString(userToAdd.value)
-                                if (modifyState.value.first) {
-                                    client.putRequest(
-                                        "https://dummyjson.com/users/${modifyState.value.second.id}",
-                                        jsonString
-                                    ) {
-                                        println(it)
-                                    }
-                                } else {
-                                    client.postRequest(jsonString) {
-                                        println(it)
-                                    }
-                                }
-                                addViewState.value = false
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
-                            border = BorderStroke(1.dp, Color.DarkGray)
-                        ) {
-                            Text(
-                                text = "Confirm",
-                                color = MaterialTheme.colors.surface
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun MyTextField(index : Int,
-                toModify : Pair<Boolean, User>,
-                attribute : String,
-                onUpdate : (String) -> Unit
-) {
-    val fieldValue = if (toModify.first)
-        remember { mutableStateOf(toModify.second.attrToArray()[index]) }
-    else
-        remember { mutableStateOf("") }
-    val isValid = remember { mutableStateOf(Validator.validate(attribute, fieldValue.value)) }
-    val outlineColor = if (isValid.value) Color.Green else Color.Red
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = fieldValue.value,
-        isError = !isValid.value,
-        onValueChange = { value ->
-            fieldValue.value = value
-            isValid.value = if (Validator.validate(attribute, value)) {
-                onUpdate(value)
-                true
-            } else {
-                false
-            }
-        },
-        label = {
-            Text(attribute.replaceFirstChar { it.uppercaseChar() })
-        },
-        placeholder = {
-            Text("Enter your $attribute")
-        },
-        singleLine = true,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = outlineColor,
-            unfocusedBorderColor = outlineColor,
-            errorBorderColor = outlineColor,
-            focusedLabelColor = outlineColor,
-            errorLabelColor = outlineColor,
-            backgroundColor = MaterialTheme.colors.background,
-            errorCursorColor = Color.White,
-            cursorColor = Color.White,
-        )
-    )
-}
-
-@Composable
-fun MyScreen(addViewState : MutableState<Boolean>,
-             client : Models,
-             users : Array<User>?,
-             isModifyOn: MutableState<Pair<Boolean, User>>
-) {
-    var usersList by remember {
-        mutableStateOf(users)
-    }
-    Scaffold(
-        topBar = { SearchBar(client) { response ->
-            usersList = ObjectMapper().readValue(response, Users::class.java).users
-        }},
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    addViewState.value = true
-                    isModifyOn.value = Pair(false, User())
-                },
-                backgroundColor = MaterialTheme.colors.primary
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = null
-                )
-            }
-        },
-        backgroundColor = MaterialTheme.colors.background
-    ) { padding ->
-        Box(
-            modifier = Modifier.padding(padding)
-        ) {
-            MainContent(usersList, client, addViewState, isModifyOn)
         }
     }
 }

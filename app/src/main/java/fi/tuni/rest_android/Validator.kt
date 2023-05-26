@@ -6,7 +6,7 @@ object Validator {
     fun checkAllFieldsValid(user : User) : Boolean {
         return ((0 until user.getAttributes().size).all { index ->
             validate(user.getAttributes()[index], user.attrToArray()[index])
-        } )
+        })
     }
 
     fun validate(indicator : String, value : String) : Boolean {
