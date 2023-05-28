@@ -11,23 +11,27 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.fasterxml.jackson.databind.ObjectMapper
-import fi.tuni.rest_android.*
+import fi.tuni.rest_android.usercomponents.User
+import fi.tuni.rest_android.tools.Models
+import fi.tuni.rest_android.usercomponents.Users
+import fi.tuni.rest_android.views.mainview.components.*
+import kotlin.concurrent.thread
 
 @Composable
 fun MainView(addViewState : MutableState<Boolean>,
              client : Models,
-             users : Array<User>?,
+             users : Users,
              isModifyOn: MutableState<Pair<Boolean, User>>
 ) {
-    var usersList by remember {
-        mutableStateOf(users)
+    val usersList = remember {
+        mutableStateOf(users.users)
     }
     Scaffold(
         topBar = { SearchBar(client) { response ->
-            usersList = ObjectMapper()
+            usersList.value = ObjectMapper()
                 .readValue(response, Users::class.java)
                 .users
-        }
+            }
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -43,12 +47,21 @@ fun MainView(addViewState : MutableState<Boolean>,
                 )
             }
         },
+        bottomBar = {
+            PaginationButtons(users, client) {
+                thread {
+                    usersList.value = ObjectMapper()
+                        .readValue(it, Users::class.java)
+                        .users
+                }
+            }
+        },
         backgroundColor = MaterialTheme.colors.background
     ) { padding ->
         Box(
             modifier = Modifier.padding(padding)
         ) {
-            MainContent(usersList, client, addViewState, isModifyOn)
+            MainContent(usersList.value, client, addViewState, isModifyOn)
         }
     }
 }

@@ -11,9 +11,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import fi.tuni.rest_android.Models
-import fi.tuni.rest_android.User
-import fi.tuni.rest_android.Validator
+import fi.tuni.rest_android.tools.Models
+import fi.tuni.rest_android.usercomponents.User
+import fi.tuni.rest_android.tools.Validator
 import fi.tuni.rest_android.views.addview.components.*
 
 @Composable
@@ -34,15 +34,6 @@ fun AddView(addViewState : MutableState<Boolean>,
         LazyColumn(
             modifier = Modifier.padding(10.dp)
         ) {
-            item {
-                NavigationButtons(
-                    addViewState,
-                    modifyState,
-                    userToAdd,
-                    isConfirmEnabled,
-                    client
-                )
-            }
             itemsIndexed(modifyState
                 .value
                 .second
@@ -61,6 +52,15 @@ fun AddView(addViewState : MutableState<Boolean>,
                         userToAdd.value.updateAttributes(index, it)
                     }
                 }
+            }
+            item {
+                NavigationButtons(
+                    addViewState,
+                    modifyState,
+                    userToAdd,
+                    isConfirmEnabled,
+                    client
+                )
             }
         }
     }

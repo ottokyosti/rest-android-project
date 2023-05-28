@@ -1,20 +1,17 @@
 package fi.tuni.rest_android.views.addview.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.fasterxml.jackson.databind.ObjectMapper
-import fi.tuni.rest_android.Models
-import fi.tuni.rest_android.User
+import fi.tuni.rest_android.tools.Models
+import fi.tuni.rest_android.usercomponents.User
+import fi.tuni.rest_android.views.addview.alerts.AddUpdateSuccessAlert
 
 @Composable
 fun NavigationButtons(addViewState : MutableState<Boolean>,
@@ -23,25 +20,35 @@ fun NavigationButtons(addViewState : MutableState<Boolean>,
                       isConfirmEnabled : MutableState<Boolean>,
                       client : Models
 ) {
+    val responseMessage = remember {
+        mutableStateOf("")
+    }
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
     ) {
         Button(
-            modifier = Modifier.align(Alignment.CenterStart),
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .size(75.dp, 40.dp),
             onClick = {
                 addViewState.value = false
             },
-            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
-            border = BorderStroke(1.dp, Color.DarkGray)
+            colors = ButtonDefaults.buttonColors(
+                MaterialTheme.colors.background
+            ),
         ) {
             Text(
-                text = "Cancel",
+                text = "Back",
                 color = MaterialTheme.colors.surface
             )
         }
         Spacer(Modifier.width(5.dp))
         Button(
-            modifier = Modifier.align(Alignment.CenterEnd),
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .size(75.dp, 40.dp),
             onClick = {
                 val jsonString = ObjectMapper()
                     .writeValueAsString(userToAdd.value)
@@ -54,14 +61,13 @@ fun NavigationButtons(addViewState : MutableState<Boolean>,
                         }",
                         jsonString
                     ) {
-                        println(it)
+                        responseMessage.value = it
                     }
                 } else {
                     client.postRequest(jsonString) {
-                        println(it)
+                        responseMessage.value = it
                     }
                 }
-                addViewState.value = false
             },
             enabled = isConfirmEnabled.value,
             colors = ButtonDefaults.buttonColors(
@@ -76,4 +82,8 @@ fun NavigationButtons(addViewState : MutableState<Boolean>,
             Text(text = "Save")
         }
     }
+    if (responseMessage.value != "")
+        AddUpdateSuccessAlert(responseMessage) {
+            addViewState.value = false
+        }
 }

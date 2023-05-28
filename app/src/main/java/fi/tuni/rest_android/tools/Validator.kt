@@ -1,6 +1,7 @@
-package fi.tuni.rest_android
+package fi.tuni.rest_android.tools
 
 import android.util.Patterns
+import fi.tuni.rest_android.usercomponents.User
 
 object Validator {
     fun checkAllFieldsValid(user : User) : Boolean {

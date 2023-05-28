@@ -1,4 +1,4 @@
-package fi.tuni.rest_android
+package fi.tuni.rest_android.usercomponents
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

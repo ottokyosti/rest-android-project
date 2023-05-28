@@ -1,4 +1,4 @@
-package fi.tuni.rest_android
+package fi.tuni.rest_android.tools
 
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -29,7 +29,7 @@ class Models {
         val requestBody = jsonString.toRequestBody("application/json".toMediaType())
         val request = Request.Builder().url(url).post(requestBody).build()
         makeRequest(request) {
-            callback(it)
+            callback("User added successfully!")
         }
     }
 
@@ -37,7 +37,7 @@ class Models {
         val requestBody = jsonString.toRequestBody("application/json".toMediaType())
         val request = Request.Builder().url(url).put(requestBody).build()
         makeRequest(request) {
-            callback(it)
+            callback("User updated successfully!")
         }
     }
 

@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import fi.tuni.rest_android.User
-import fi.tuni.rest_android.Validator
+import fi.tuni.rest_android.usercomponents.User
+import fi.tuni.rest_android.tools.Validator
 
 @Composable
 fun MyTextField(index : Int,
