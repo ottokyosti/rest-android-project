@@ -2,6 +2,20 @@ package fi.tuni.rest_android.usercomponents
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+/**
+ * Data class representing a User.
+ *
+ * @property id The unique identifier of the user.
+ * @property firstName The first name of the user.
+ * @property lastName The last name of the user.
+ * @property username The username of the user.
+ * @property age The age of the user.
+ * @property email The email address of the user.
+ * @property phone The phone number of the user.
+ * @property height The height of the user in centimeters.
+ * @property weight The weight of the user in kilograms.
+ * @property image The image of the user.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class User (var id : Int? = null,
                  var firstName : String? = null,
@@ -14,6 +28,13 @@ data class User (var id : Int? = null,
                  var weight : Double? = null,
                  var image : String? = null) {
 
+
+    /**
+     * Updates the attribute of the user based on the provided index and value.
+     *
+     * @param index The index of the attribute to update.
+     * @param value The new value for the attribute.
+     */
     fun updateAttributes(index : Int, value : String) {
         when (index) {
             0 -> {
@@ -43,6 +64,11 @@ data class User (var id : Int? = null,
         }
     }
 
+    /**
+     * Returns a string representation of the user.
+     *
+     * @return A string representing the user's information.
+     */
     override fun toString() : String {
         return "${this.firstName} ${this.lastName}\n" +
                 "Username: ${this.username}\n" +
@@ -53,6 +79,11 @@ data class User (var id : Int? = null,
                 "Weight: ${this.weight} kg"
     }
 
+    /**
+     * Returns an array of attribute names for the user.
+     *
+     * @return An array of attribute names.
+     */
     fun getAttributes() : Array<String> {
         return arrayOf(
             "first name",
@@ -66,6 +97,11 @@ data class User (var id : Int? = null,
         )
     }
 
+    /**
+     * Returns an array of attribute values for the user.
+     *
+     * @return An array of attribute values.
+     */
     fun attrToArray() : Array<String> {
         return arrayOf(
             firstName ?: "",

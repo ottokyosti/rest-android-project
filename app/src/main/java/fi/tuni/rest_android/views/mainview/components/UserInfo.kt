@@ -22,15 +22,30 @@ import fi.tuni.rest_android.views.mainview.alerts.DeleteConfirmDialog
 import fi.tuni.rest_android.usercomponents.User
 import fi.tuni.rest_android.ui.theme.containerColor
 
+/**
+ * Composable function that represents the user information display.
+ *
+ * @param user The User object representing the user information to display.
+ * @param client The Models object used for making network
+ * requests passed down to a child component.
+ * @param addViewState The mutable state representing the add view
+ * state to pass down to a child component.
+ * @param modify The mutable state representing the modify state
+ * state to pass down to a child component.
+ */
 @Composable
 fun UserInfo(user : User,
              client : Models,
              addViewState : MutableState<Boolean>,
              modify : MutableState<Pair<Boolean, User>>
 ) {
+    // Mutable state to track whether the user information is expanded
     var isExpanded by remember { mutableStateOf(false) }
+    // Mutable state to track the confirmation dialog for deleting the user
     var openDeleteConfirm by remember { mutableStateOf(false) }
+    // Mutable state to track the delete operation's success message
     var deleteSuccessful by remember { mutableStateOf("") }
+    // Component representing the style of information's background
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,6 +61,7 @@ fun UserInfo(user : User,
         elevation = 5.dp,
     ) {
         Box {
+            // Component representing information in text format
             Column(
                 modifier = Modifier
                     .align(Alignment.TopStart)
@@ -56,10 +72,12 @@ fun UserInfo(user : User,
                     maxLines = if (isExpanded) Int.MAX_VALUE else 2
                 )
             }
+            // Component representing action icons
             Column(
                 Modifier.align(Alignment.TopEnd)
             ) {
                 if (isExpanded) {
+                    // Delete user button
                     IconButton(
                         onClick = { openDeleteConfirm = !openDeleteConfirm }
                     ) {
@@ -68,6 +86,7 @@ fun UserInfo(user : User,
                             contentDescription = "Delete user"
                         )
                     }
+                    // Modify user button
                     IconButton(
                         onClick = {
                             modify.value = Pair(true, user)
@@ -80,6 +99,7 @@ fun UserInfo(user : User,
                         )
                     }
                 }
+                // Expand info button
                 IconButton(
                     onClick = { isExpanded = !isExpanded }
                 ) {
@@ -95,6 +115,7 @@ fun UserInfo(user : User,
             }
         }
         if (openDeleteConfirm) {
+            // Dialog for confirming delete action
             DeleteConfirmDialog {
                 if (it) {
                     val url = "https://dummyjson.com/users/${user.id}"
@@ -106,6 +127,7 @@ fun UserInfo(user : User,
             }
         }
         if (deleteSuccessful != "") {
+            // Dialog for alerting user of successful delete action
             AlertDialog(
                 onDismissRequest = { deleteSuccessful = "" },
                 title = {

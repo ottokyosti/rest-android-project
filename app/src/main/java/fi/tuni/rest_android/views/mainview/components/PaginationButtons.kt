@@ -12,18 +12,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fi.tuni.rest_android.tools.Models
-import fi.tuni.rest_android.usercomponents.User
 import fi.tuni.rest_android.usercomponents.Users
 
+/**
+ * Composable function that represents the pagination buttons component.
+ *
+ * @param users The Users object containing information about the users.
+ * @param client The Models object used for making network requests.
+ * @param callback The callback function to be invoked when
+ * current page changes.
+ */
 @Composable
 fun PaginationButtons(users : Users,
                       client : Models,
                       callback: (String) -> Unit
 ) {
+    // Total number of pages based on the number of users.
     val totalPages = users.total / 10
+    // Mutable state to track the current page.
     val currentPage = remember {
         mutableStateOf(1)
     }
+    // Mutable state to track the initial composition.
     val isInitialComposition = remember {
         mutableStateOf(true)
     }
@@ -33,6 +43,7 @@ fun PaginationButtons(users : Users,
             .fillMaxWidth()
             .padding(top = 5.dp, bottom = 5.dp, start = 2.dp, end = 2.dp)
     ) {
+        // Previous page button
         IconButton(
             onClick = {
                 currentPage.value -= 1
@@ -48,6 +59,7 @@ fun PaginationButtons(users : Users,
                 modifier = Modifier.padding(0.dp)
             )
         }
+        // First page button
         Button(
             onClick = {
                 currentPage.value = 1
@@ -59,7 +71,7 @@ fun PaginationButtons(users : Users,
                 backgroundColor = MaterialTheme.colors.background
             ),
             border = BorderStroke(
-                1.dp, if (currentPage.value == 1) {
+                2.dp, if (currentPage.value == 1) {
                     MaterialTheme.colors.primary
                 } else {
                     Color.Transparent
@@ -71,12 +83,14 @@ fun PaginationButtons(users : Users,
                 fontSize = 13.sp
             )
         }
-        val visiblePageNumbers = if (currentPage.value == 1) {
+        // Get first visible page number after 1
+        val visiblePageNumber = if (currentPage.value == 1) {
             currentPage.value + 1
         } else {
             minOf(currentPage.value, totalPages - 3)
         }
-        for (page in visiblePageNumbers until visiblePageNumbers + 3) {
+        // Render buttons for visible page numbers
+        for (page in visiblePageNumber until visiblePageNumber + 3) {
             Button(
                 onClick = {
                     currentPage.value = page
@@ -88,7 +102,7 @@ fun PaginationButtons(users : Users,
                     backgroundColor = MaterialTheme.colors.background
                 ),
                 border = BorderStroke(
-                    1.dp, if (currentPage.value == page) {
+                    2.dp, if (currentPage.value == page) {
                         MaterialTheme.colors.primary
                     } else {
                         Color.Transparent
@@ -101,6 +115,7 @@ fun PaginationButtons(users : Users,
                 )
             }
         }
+        // Last page button
         Button(
             onClick = {
                 currentPage.value = totalPages
@@ -112,7 +127,7 @@ fun PaginationButtons(users : Users,
                 backgroundColor = MaterialTheme.colors.background
             ),
             border = BorderStroke(
-                1.dp, if (currentPage.value == totalPages) {
+                2.dp, if (currentPage.value == totalPages) {
                     MaterialTheme.colors.primary
                 } else {
                     Color.Transparent
@@ -124,6 +139,7 @@ fun PaginationButtons(users : Users,
                 fontSize = 13.sp,
             )
         }
+        // Next page button
         IconButton(
             onClick = {
                 currentPage.value += 1
@@ -138,6 +154,7 @@ fun PaginationButtons(users : Users,
                 contentDescription = "Next page"
             )
         }
+        // Invoke the callback function when the current page changes
         LaunchedEffect(currentPage.value) {
             if (!isInitialComposition.value) {
                 client.getRequest(

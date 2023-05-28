@@ -9,8 +9,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import fi.tuni.rest_android.ui.theme.containerColor
 
+/**
+ * Composable function that displays a delete confirmation dialog.
+ *
+ * @param callback The callback function to be invoked with the
+ * user's confirmation choice.
+ */
 @Composable
 fun DeleteConfirmDialog(callback: (Boolean) -> Unit) {
+    // Component representing the dialog showing delete action confirmation
     AlertDialog(
         onDismissRequest = { callback(false) },
         title = {
@@ -26,6 +33,7 @@ fun DeleteConfirmDialog(callback: (Boolean) -> Unit) {
             )
         },
         dismissButton = {
+            // Cancel button
             Button(
                 onClick = { callback(false) },
                 colors = ButtonDefaults.buttonColors(containerColor())
@@ -37,6 +45,7 @@ fun DeleteConfirmDialog(callback: (Boolean) -> Unit) {
             }
         },
         confirmButton = {
+            // Confirm button
             Button(
                 onClick = { callback(true) },
                 colors = ButtonDefaults.buttonColors(containerColor())

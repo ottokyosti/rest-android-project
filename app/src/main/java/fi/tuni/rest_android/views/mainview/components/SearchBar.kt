@@ -11,13 +11,24 @@ import androidx.compose.ui.graphics.Color
 import fi.tuni.rest_android.tools.Models
 import kotlin.concurrent.thread
 
+/**
+ * Composable function that represents the search bar component.
+ *
+ * @param client The Models object used for making network requests.
+ * @param callback The callback function to be invoked
+ * when the search is performed.
+ */
 @Composable
 fun SearchBar(client : Models, callback : (String) -> Unit) {
+    // Mutable state to track the search word
     var searchWord by remember { mutableStateOf("") }
+    // URL for performing the search
     val url = "https://dummyjson.com/users/search?q=$searchWord"
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background
     ) {
+        // TextField representing a searchbar containing
+        // search icon, and appearing clear button
         TextField(
             value = searchWord,
             onValueChange = { value ->

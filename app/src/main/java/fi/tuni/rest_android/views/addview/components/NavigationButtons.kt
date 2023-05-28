@@ -13,6 +13,17 @@ import fi.tuni.rest_android.tools.Models
 import fi.tuni.rest_android.usercomponents.User
 import fi.tuni.rest_android.views.addview.alerts.AddUpdateSuccessAlert
 
+/**
+ * Composable function that displays navigation buttons canceling the
+ * add/modify actions and saving the added/modified user.
+ *
+ * @param addViewState The state variable for component to disable add view
+ * @param modifyState The state variable used in client request.
+ * @param userToAdd The state holding the user being added or modified.
+ * @param isConfirmEnabled The state indicating whether the confirm
+ * button should be enabled.
+ * @param client The client used for making HTTP requests to the server.
+ */
 @Composable
 fun NavigationButtons(addViewState : MutableState<Boolean>,
                       modifyState : MutableState<Pair<Boolean, User>>,
@@ -20,6 +31,8 @@ fun NavigationButtons(addViewState : MutableState<Boolean>,
                       isConfirmEnabled : MutableState<Boolean>,
                       client : Models
 ) {
+    // State for displaying the response
+    // message after saving or updating a user
     val responseMessage = remember {
         mutableStateOf("")
     }
@@ -28,6 +41,7 @@ fun NavigationButtons(addViewState : MutableState<Boolean>,
             .fillMaxWidth()
             .padding(10.dp)
     ) {
+        // Back button
         Button(
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -45,6 +59,7 @@ fun NavigationButtons(addViewState : MutableState<Boolean>,
             )
         }
         Spacer(Modifier.width(5.dp))
+        // Save/Update button
         Button(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
@@ -53,6 +68,7 @@ fun NavigationButtons(addViewState : MutableState<Boolean>,
                 val jsonString = ObjectMapper()
                     .writeValueAsString(userToAdd.value)
                 if (modifyState.value.first) {
+                    // Update existing user
                     client.putRequest(
                         "https://dummyjson.com/users/${modifyState
                             .value
@@ -64,6 +80,7 @@ fun NavigationButtons(addViewState : MutableState<Boolean>,
                         responseMessage.value = it
                     }
                 } else {
+                    // Add new user
                     client.postRequest(jsonString) {
                         responseMessage.value = it
                     }
@@ -82,7 +99,9 @@ fun NavigationButtons(addViewState : MutableState<Boolean>,
             Text(text = "Save")
         }
     }
+    // Display a success alert if a response message is present
     if (responseMessage.value != "")
+        // Component representing alert to be shown with the message
         AddUpdateSuccessAlert(responseMessage) {
             addViewState.value = false
         }

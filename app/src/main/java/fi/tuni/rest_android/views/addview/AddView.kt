@@ -16,24 +16,38 @@ import fi.tuni.rest_android.usercomponents.User
 import fi.tuni.rest_android.tools.Validator
 import fi.tuni.rest_android.views.addview.components.*
 
+/**
+ * Composable function that displays the add or edit view for a user
+ * based on modify state.
+ *
+ * @param addViewState The state of add view to pass down to NavigationButtons.
+ * @param modifyState The state of modify parameter to pass down to
+ * NavigationButtons and list of TextFields
+ * @param client The client to pass down to NavigationButtons.
+ */
 @Composable
 fun AddView(addViewState : MutableState<Boolean>,
             modifyState : MutableState<Pair<Boolean, User>>,
             client : Models,
 ) {
+    // Component representing background for the add view
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
+        // Store the user to add/edit in a mutable state
         val userToAdd = remember {
             mutableStateOf(modifyState.value.second)
         }
+        // Enable/disable the confirm button
+        // based on whether all fields are valid
         val isConfirmEnabled = remember {
             mutableStateOf(Validator.checkAllFieldsValid(userToAdd.value))
         }
         LazyColumn(
             modifier = Modifier.padding(10.dp)
         ) {
+            // Display user attributes in a vertical list
             itemsIndexed(modifyState
                 .value
                 .second
@@ -43,6 +57,8 @@ fun AddView(addViewState : MutableState<Boolean>,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(vertical = 5.dp)
                 ) {
+                    // Dynamic TextField for each of the user's
+                    // attributes
                     MyTextField(
                         index,
                         modifyState.value,
@@ -54,6 +70,8 @@ fun AddView(addViewState : MutableState<Boolean>,
                 }
             }
             item {
+                // Navigation buttons for saving and
+                // canceling the add/edit operation
                 NavigationButtons(
                     addViewState,
                     modifyState,

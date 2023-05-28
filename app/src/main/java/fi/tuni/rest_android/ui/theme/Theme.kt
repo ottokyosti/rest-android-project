@@ -7,29 +7,30 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
+// Defines colors to be used when dark mode is on
 private val DarkColorPalette = darkColors(
-    primary = Orange,
+    primary = Color(0xFFFF5722),
     background = Color.Black,
     surface = Color.White
 )
 
+// Defines colors to be used when light mode is on
 private val LightColorPalette = lightColors(
-    primary = Orange,
+    primary = Color(0xFFFF5722),
     background = Color.White,
     surface = Color.Black
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
 )
 
+/**
+ * Composable function that sets up the theme for the Android application.
+ *
+ * @param darkTheme Determines if the dark theme should be used.
+ * @param content The content of the application.
+ */
 @Composable
-fun RestAndroidTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun RestAndroidTheme(darkTheme: Boolean = isSystemInDarkTheme(),
+                     content: @Composable () -> Unit
+) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
@@ -44,6 +45,11 @@ fun RestAndroidTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compo
     )
 }
 
+/**
+ * Returns the appropriate container color based on the current theme.
+ *
+ * @return The container color.
+ */
 @Composable
 fun containerColor() : Color {
     return if (MaterialTheme.colors.isLight) {

@@ -16,6 +16,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import fi.tuni.rest_android.usercomponents.User
 import fi.tuni.rest_android.tools.Validator
 
+/**
+ * Composable function that represents a custom text field
+ * used for inputting user attributes.
+ *
+ * @param index The index of the attribute in the list of attributes.
+ * @param toModify The pair indicating the modification
+ * mode and the user to modify.
+ * @param attribute The name of the attribute being edited.
+ * @param isConfirmEnabled The state indicating whether the
+ * confirm button should be enabled.
+ * @param onUpdate The callback function invoked when the text
+ * value of the field changes.
+ */
 @Composable
 fun MyTextField(index : Int,
                 toModify : Pair<Boolean, User>,
@@ -23,14 +36,20 @@ fun MyTextField(index : Int,
                 isConfirmEnabled : MutableState<Boolean>,
                 onUpdate : (String) -> Unit
 ) {
+    // Determine the initial field value based on the modification mode
     val fieldValue = if (toModify.first)
         remember { mutableStateOf(toModify.second.attrToArray()[index]) }
     else
         remember { mutableStateOf("") }
+    // Check the validity of the field value
     val isValid = remember {
         mutableStateOf(Validator.validate(attribute, fieldValue.value))
     }
+    // Determine the outline color based on validity
     val outlineColor = if (isValid.value) Color.Green else Color.Red
+    // TextField component for each of the user's attributes with
+    // label, placeholder text, icon when value is valid
+    // and keyboard options for different attributes
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = fieldValue.value,
