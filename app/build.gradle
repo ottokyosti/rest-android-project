@@ -49,7 +49,6 @@ android {
 }
 
 dependencies {
-
     implementation 'com.fasterxml.jackson.core:jackson-core:2.14.2'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
@@ -68,4 +67,10 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+}
+
+import org.jetbrains.dokka.gradle.DokkaTask
+
+tasks.withType(DokkaTask).configureEach {
+    moduleName = "REST Android"
 }
