@@ -1,0 +1,69 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:fi.tuni.rest_android.tools////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/index.html
+$dokka.location:fi.tuni.rest_android.tools/Models///PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/-models/index.html
+$dokka.location:fi.tuni.rest_android.tools/Models/Models/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/-models/-models.html
+$dokka.location:fi.tuni.rest_android.tools/Models/deleteRequest/#kotlin.String#kotlin.Function1[kotlin.String,kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/-models/delete-request.html
+$dokka.location:fi.tuni.rest_android.tools/Models/getRequest/#kotlin.String#kotlin.Function1[kotlin.String,kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/-models/get-request.html
+$dokka.location:fi.tuni.rest_android.tools/Models/postRequest/#kotlin.String#kotlin.Function1[kotlin.String,kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/-models/post-request.html
+$dokka.location:fi.tuni.rest_android.tools/Models/putRequest/#kotlin.String#kotlin.String#kotlin.Function1[kotlin.String,kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/-models/put-request.html
+$dokka.location:fi.tuni.rest_android.tools/Validator///PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/-validator/index.html
+$dokka.location:fi.tuni.rest_android.tools/Validator/checkAllFieldsValid/#fi.tuni.rest_android.usercomponents.User/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/-validator/check-all-fields-valid.html
+$dokka.location:fi.tuni.rest_android.tools/Validator/validate/#kotlin.String#kotlin.String/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.tools/-validator/validate.html
+$dokka.location:fi.tuni.rest_android.ui.theme////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.ui.theme/index.html
+$dokka.location:fi.tuni.rest_android.ui.theme//RestAndroidTheme/#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.ui.theme/-rest-android-theme.html
+$dokka.location:fi.tuni.rest_android.ui.theme//Shapes/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.ui.theme/-shapes.html
+$dokka.location:fi.tuni.rest_android.ui.theme//Typography/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.ui.theme/-typography.html
+$dokka.location:fi.tuni.rest_android.ui.theme//containerColor/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.ui.theme/container-color.html
+$dokka.location:fi.tuni.rest_android.usercomponents////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/index.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User///PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/index.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/User/#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.Int?#kotlin.String?#kotlin.String?#kotlin.Int?#kotlin.Double?#kotlin.String?/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/-user.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/age/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/age.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/attrToArray/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/attr-to-array.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/email/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/email.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/firstName/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/first-name.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/getAttributes/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/get-attributes.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/height/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/height.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/id/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/id.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/image/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/image.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/lastName/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/last-name.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/phone/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/phone.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/toString/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/to-string.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/updateAttributes/#kotlin.Int#kotlin.String/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/update-attributes.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/username/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/username.html
+$dokka.location:fi.tuni.rest_android.usercomponents/User/weight/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-user/weight.html
+$dokka.location:fi.tuni.rest_android.usercomponents/Users///PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-users/index.html
+$dokka.location:fi.tuni.rest_android.usercomponents/Users/Users/#kotlin.Array[fi.tuni.rest_android.usercomponents.User]?#kotlin.Int/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-users/-users.html
+$dokka.location:fi.tuni.rest_android.usercomponents/Users/total/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-users/total.html
+$dokka.location:fi.tuni.rest_android.usercomponents/Users/users/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.usercomponents/-users/users.html
+$dokka.location:fi.tuni.rest_android.views.addview.alerts////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.addview.alerts/index.html
+$dokka.location:fi.tuni.rest_android.views.addview.alerts//AddUpdateSuccessAlert/#androidx.compose.runtime.MutableState[kotlin.String]#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.addview.alerts/-add-update-success-alert.html
+$dokka.location:fi.tuni.rest_android.views.addview.components////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.addview.components/index.html
+$dokka.location:fi.tuni.rest_android.views.addview.components//MyTextField/#kotlin.Int#kotlin.Pair[kotlin.Boolean,fi.tuni.rest_android.usercomponents.User]#kotlin.String#androidx.compose.runtime.MutableState[kotlin.Boolean]#kotlin.Function1[kotlin.String,kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.addview.components/-my-text-field.html
+$dokka.location:fi.tuni.rest_android.views.addview.components//NavigationButtons/#androidx.compose.runtime.MutableState[kotlin.Boolean]#androidx.compose.runtime.MutableState[kotlin.Pair[kotlin.Boolean,fi.tuni.rest_android.usercomponents.User]]#androidx.compose.runtime.MutableState[fi.tuni.rest_android.usercomponents.User]#androidx.compose.runtime.MutableState[kotlin.Boolean]#fi.tuni.rest_android.tools.Models/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.addview.components/-navigation-buttons.html
+$dokka.location:fi.tuni.rest_android.views.addview////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.addview/index.html
+$dokka.location:fi.tuni.rest_android.views.addview//AddView/#androidx.compose.runtime.MutableState[kotlin.Boolean]#androidx.compose.runtime.MutableState[kotlin.Pair[kotlin.Boolean,fi.tuni.rest_android.usercomponents.User]]#fi.tuni.rest_android.tools.Models/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.addview/-add-view.html
+$dokka.location:fi.tuni.rest_android.views.mainview.alerts////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview.alerts/index.html
+$dokka.location:fi.tuni.rest_android.views.mainview.alerts//DeleteConfirmDialog/#kotlin.Function1[kotlin.Boolean,kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview.alerts/-delete-confirm-dialog.html
+$dokka.location:fi.tuni.rest_android.views.mainview.components////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview.components/index.html
+$dokka.location:fi.tuni.rest_android.views.mainview.components//MainContent/#kotlin.Array[fi.tuni.rest_android.usercomponents.User]?#fi.tuni.rest_android.tools.Models#androidx.compose.runtime.MutableState[kotlin.Boolean]#androidx.compose.runtime.MutableState[kotlin.Pair[kotlin.Boolean,fi.tuni.rest_android.usercomponents.User]]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview.components/-main-content.html
+$dokka.location:fi.tuni.rest_android.views.mainview.components//PaginationButtons/#fi.tuni.rest_android.usercomponents.Users#fi.tuni.rest_android.tools.Models#kotlin.Function1[kotlin.String,kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview.components/-pagination-buttons.html
+$dokka.location:fi.tuni.rest_android.views.mainview.components//SearchBar/#fi.tuni.rest_android.tools.Models#kotlin.Function1[kotlin.String,kotlin.Unit]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview.components/-search-bar.html
+$dokka.location:fi.tuni.rest_android.views.mainview.components//UserCard/#fi.tuni.rest_android.usercomponents.User#fi.tuni.rest_android.tools.Models#androidx.compose.runtime.MutableState[kotlin.Boolean]#androidx.compose.runtime.MutableState[kotlin.Pair[kotlin.Boolean,fi.tuni.rest_android.usercomponents.User]]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview.components/-user-card.html
+$dokka.location:fi.tuni.rest_android.views.mainview.components//UserInfo/#fi.tuni.rest_android.usercomponents.User#fi.tuni.rest_android.tools.Models#androidx.compose.runtime.MutableState[kotlin.Boolean]#androidx.compose.runtime.MutableState[kotlin.Pair[kotlin.Boolean,fi.tuni.rest_android.usercomponents.User]]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview.components/-user-info.html
+$dokka.location:fi.tuni.rest_android.views.mainview////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview/index.html
+$dokka.location:fi.tuni.rest_android.views.mainview//MainView/#androidx.compose.runtime.MutableState[kotlin.Boolean]#fi.tuni.rest_android.tools.Models#fi.tuni.rest_android.usercomponents.Users#androidx.compose.runtime.MutableState[kotlin.Pair[kotlin.Boolean,fi.tuni.rest_android.usercomponents.User]]/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android.views.mainview/-main-view.html
+$dokka.location:fi.tuni.rest_android////PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android/index.html
+$dokka.location:fi.tuni.rest_android/MainActivity///PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android/-main-activity/index.html
+$dokka.location:fi.tuni.rest_android/MainActivity/MainActivity/#/PointingToDeclaration/-r-e-s-t -android/fi.tuni.rest_android/-main-activity/-main-activity.html
+fi.tuni.rest_android
+fi.tuni.rest_android.tools
+fi.tuni.rest_android.ui.theme
+fi.tuni.rest_android.usercomponents
+fi.tuni.rest_android.views.addview
+fi.tuni.rest_android.views.addview.alerts
+fi.tuni.rest_android.views.addview.components
+fi.tuni.rest_android.views.mainview
+fi.tuni.rest_android.views.mainview.alerts
+fi.tuni.rest_android.views.mainview.components
+

@@ -14,6 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import fi.tuni.rest_android.usercomponents.User
 import fi.tuni.rest_android.tools.Models
 import fi.tuni.rest_android.usercomponents.Users
+import fi.tuni.rest_android.views.mainview.components.MainContent
+import fi.tuni.rest_android.views.mainview.components.PaginationButtons
+import fi.tuni.rest_android.views.mainview.components.SearchBar
 import fi.tuni.rest_android.views.mainview.components.*
 import kotlin.concurrent.thread
 
