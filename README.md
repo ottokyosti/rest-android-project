@@ -41,5 +41,8 @@ To build and use the REST Android Project on your own phone or emulator, follow 
 3. Build and run the application.
 4. The app will launch on your device or emulator, and you will be able to view, add, update, and delete users from the dummy backend.
 
+## Documentation
+Generated documentation can be found [here](app/doc/dokka/html)
+
 ## Screencast
 Link to a screencast of this project as well as iOS version of this project: [Screencast](https://www.youtube.com/watch?v=OEuH21UGc_w)
