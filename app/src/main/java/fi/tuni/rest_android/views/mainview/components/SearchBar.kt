@@ -23,7 +23,9 @@ fun SearchBar(client : Models, callback : (String) -> Unit) {
     // Mutable state to track the search word
     var searchWord by remember { mutableStateOf("") }
     // URL for performing the search
-    val url = "https://dummyjson.com/users/search?q=$searchWord"
+    val url = remember {
+        mutableStateOf("https://dummyjson.com/users/search?q=$searchWord")
+    }
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background
     ) {
@@ -33,7 +35,8 @@ fun SearchBar(client : Models, callback : (String) -> Unit) {
             value = searchWord,
             onValueChange = { value ->
                 searchWord = value
-                client.getRequest(url) {
+                url.value = "https://dummyjson.com/users/search?q=$value"
+                client.getRequest(url.value) {
                     thread {
                         callback(it)
                     }
@@ -50,7 +53,9 @@ fun SearchBar(client : Models, callback : (String) -> Unit) {
                     IconButton(
                         onClick = {
                             searchWord = ""
-                            client.getRequest(url) {
+                            url.value =
+                                "https://dummyjson.com/users?limit=10&skip=0"
+                            client.getRequest(url.value) {
                                 thread {
                                     callback(it)
                                 }
